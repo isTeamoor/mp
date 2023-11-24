@@ -8,6 +8,11 @@
         </div>
         <p>Input Label</p><input type="text" id="new label" name="new label"><br>
         <p>Input Text Content</p><textarea name="new textContent" rows="10" cols="30"></textarea><br>
+        <form class="input-img">
+            <input @change="imgIn" type="file" id="imgbox" accept="image/png, image/jpeg, image/jpg" />
+        </form>
+
+        <img class="preView" />
 
     </div>
 </template>
@@ -16,7 +21,8 @@ export default {
     name: 'createAd',
     data() {
         return {
-            serverResponse: ''
+            serverResponse: '',
+            photo: ''
         }
     },
     methods: {
@@ -35,6 +41,18 @@ export default {
 
             })
 
+        },
+        imgIn() {
+            const form = document.querySelector('.input-img')
+            const imgBox = document.querySelector('#imgbox')
+            const img = imgBox.files[0]
+
+            const imgPreview = document.querySelector('.preView')
+            imgPreview.src = URL.createObjectURL(img);
+
+            const formData = new FormData(form);
+            formData.append('file', img);
+            console.log(formData, img)
         }
     }
 }
