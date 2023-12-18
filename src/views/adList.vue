@@ -6,6 +6,7 @@
             <figure v-for="miniAd in  miniAds " :key="miniAd.id">
                 <button @click="deleteAd(miniAd.id)">X</button>
                 <h4>{{ miniAd.label }}</h4>
+                <img :src="`http://127.0.0.1:8000/db/getImg/${miniAd.id}`" />
 
                 <figcaption>{{ miniAd.textContent }}</figcaption>
             </figure>
@@ -34,7 +35,11 @@ export default {
         },
         showAllAds() {
             fetch('http://127.0.0.1:8000/db/getAllAds').then(d => d.json()).then(d => this.miniAds = d)
+        },
+        getImg(id) {
+            fetch(`http://127.0.0.1:8000/db/getImg/${id}`)
         }
+
     }
 }
 </script>

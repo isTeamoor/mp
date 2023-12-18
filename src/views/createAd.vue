@@ -1,18 +1,18 @@
 <template>
     <div class="newForm">
         <h1>Create new Ad</h1>
-        <button @click="query">Query server</button>
-        <div>
-            <h3>Server response:</h3>
-            <p>{{ serverResponse }}</p>
-        </div>
-        <p>Input Label</p><input type="text" id="new label" name="new label"><br>
-        <p>Input Text Content</p><textarea name="new textContent" rows="10" cols="30"></textarea><br>
-        <form class="input-img">
-            <input @change="imgIn" type="file" id="imgbox" accept="image/png, image/jpeg, image/jpg" />
-        </form>
 
-        <img class="preView" />
+        <img class="imgPreview" />
+
+        <form method="POST" action='http://127.0.0.1:8000/db/createNewAd' enctype="multipart/form-data">
+            <label for="new label">Input new label</label>
+            <input type="text" id="new label" name="label"><br>
+            <label for="new textContent">Input new textContent</label>
+            <textarea name="textContent" id="new textContent" rows="10" cols="30"></textarea><br>
+            <label for="new img">Input new Img</label>
+            <input type="file" name="img" id="new img" @change="showPreview" />
+            <button type="submit">Submit</button>
+        </form>
 
     </div>
 </template>
@@ -26,6 +26,15 @@ export default {
         }
     },
     methods: {
+        showPreview(event) {
+            const imgBox = document.querySelector('.imgPreview');
+            const file = event.target.files[0];
+            imgBox.src = window.URL.createObjectURL(file);
+        },
+
+
+
+
         query() {
             fetch('http://127.0.0.1:8000/db/createNewAd', {
                 method: 'POST',
@@ -38,23 +47,14 @@ export default {
                 this.serverResponse = d;
                 document.querySelector('input[name="new label"]').value = null;
                 document.querySelector('textarea[name="new textContent"]').value = null
-
             })
-
         },
-        imgIn() {
-            const form = document.querySelector('.input-img')
-            const imgBox = document.querySelector('#imgbox')
-            const img = imgBox.files[0]
-
-            const imgPreview = document.querySelector('.preView')
-            imgPreview.src = URL.createObjectURL(img);
-
-            const formData = new FormData(form);
-            formData.append('file', img);
-            console.log(formData, img)
+        getImage() {
+            const imgPreview = document.querySelector('.imgPreview')
+            document.querySelector('.imgPreview').setAttribute('src', 'http://127.0.0.1:8000/db/getImg/9') //fetch('http://127.0.0.1:8000/db/getImg').then(file => console.log(file))
         }
     }
+
 }
 </script>
 <style scoped>
@@ -69,5 +69,29 @@ export default {
 
 h1 {
     text-align: center;
+}
+
+.imgPreview {
+    width: 400px;
+    height: 400px;
+    float: right;
+    border: 5px inset black;
+    margin-right: 10px;
+}
+
+form label {
+    display: inline-block;
+    width: 200px;
+    height: 50px;
+}
+
+form button {
+    display: block;
+    margin: auto;
+}
+
+form {
+    display: inline-block;
+    max-width: 50%;
 }
 </style>

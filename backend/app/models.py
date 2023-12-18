@@ -1,6 +1,7 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional
+from typing import Optional, Annotated
 from datetime import datetime
+from fastapi import File, Form, UploadFile
 
 
 class newCreatedAd(BaseModel):
@@ -9,6 +10,11 @@ class newCreatedAd(BaseModel):
 
 class deletedAd(BaseModel):
     id: int
+
+
+
+
+
 
 
 

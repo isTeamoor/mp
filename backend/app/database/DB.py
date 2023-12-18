@@ -9,9 +9,11 @@ def query(type,command):
         con.close()
         return response
     if type=='set':
-        cur.execute(command).fetchall()
+        cur.execute(command)
         con.commit()
+        lastRecord = cur.lastrowid
         con.close()
+        return lastRecord
 
 def createTable():
     exist = query('get',"""SELECT name FROM sqlite_master WHERE type='table' AND name='ads'; """)
